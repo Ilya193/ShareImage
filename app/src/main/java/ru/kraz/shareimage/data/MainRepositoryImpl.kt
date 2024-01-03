@@ -31,7 +31,6 @@ class MainRepositoryImpl(
         return try {
             ResultFDS.Success(service.fetchImages())
         } catch (e: Exception) {
-            println("attadag $e")
             ResultFDS.Error(e)
         }
     }
