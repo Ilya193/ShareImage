@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.kraz.shareimage.domain.FetchImagesUseCase
 import ru.kraz.shareimage.domain.ImageDomain
@@ -17,8 +18,9 @@ class ImagesViewModel(
     val images: LiveData<ImagesUiState> get() = _images
 
     fun fetchImages() = viewModelScope.launch {
+        _images.value = ImagesUiState.Loading
         when (val res = fetchImagesUseCase()) {
-            is ResultFDS.Success -> _images.value = ImagesUiState.Success(res.data)
+            is ResultFDS.Success -> _images.value = ImagesUiState.Success(res.data.map { ImageUi(it) })
             is ResultFDS.Error -> _images.value = ImagesUiState.Error
         }
     }
@@ -29,6 +31,7 @@ data class ImageUi(
 )
 
 sealed interface ImagesUiState {
-    data class Success(val data: List<String>) : ImagesUiState
+    data class Success(val data: List<ImageUi>) : ImagesUiState
     data object Error : ImagesUiState
+    data object Loading : ImagesUiState
 }

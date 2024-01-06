@@ -21,9 +21,16 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <ImageView
+            android:id="@+id/palette"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/palette" />
+
+        <ImageView
             android:id="@+id/clear"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:layout_weight="1"
             android:src="@drawable/mop" />
 
         <ImageView

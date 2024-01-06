@@ -5,13 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import com.elveum.elementadapter.simpleAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.kraz.shareimage.databinding.FragmentImagesBinding
-import ru.kraz.shareimage.databinding.ItemBinding
+
 
 class ImagesFragment : Fragment() {
     private var _binding: FragmentImagesBinding? = null
@@ -20,11 +16,13 @@ class ImagesFragment : Fragment() {
 
     private val viewModel: ImagesViewModel by viewModel()
 
-    private val adapter = simpleAdapter<String, ItemBinding> {
+    /*private val adapter = simpleAdapter<String, ItemBinding> {
         bind {
             image.load(it)
         }
-    }
+    }*/
+
+    private val adapter = ImagesAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +36,7 @@ class ImagesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.images.setHasFixedSize(true)
         binding.images.adapter = adapter
+        binding.images.addItemDecoration(CustomItemDecoration())
         binding.btnRetry.setOnClickListener {
             viewModel.fetchImages()
         }
@@ -49,6 +48,7 @@ class ImagesFragment : Fragment() {
         viewModel.images.observe(viewLifecycleOwner) {
             binding.images.visibility = if (it is ImagesUiState.Success) View.VISIBLE else View.GONE
             binding.containerError.visibility = if (it is ImagesUiState.Error) View.VISIBLE else View.GONE
+            binding.loading.visibility = if (it is ImagesUiState.Loading) View.VISIBLE else View.GONE
             if (it is ImagesUiState.Success) adapter.submitList(it.data)
         }
     }
@@ -63,3 +63,5 @@ class ImagesFragment : Fragment() {
             ImagesFragment()
     }
 }
+
+

@@ -31,12 +31,15 @@ class DrawingView @JvmOverloads constructor(
         strokeWidth = 12f
     }
 
-    private var paths = mutableListOf<Path>()
+    private val paths = mutableListOf<Path>()
+    private val colors = mutableListOf<Int>()
+    private var color = Color.GREEN
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        for (p in paths) {
-            canvas.drawPath(p, paint)
+        for (index in 0 until paths.size) {
+            paint.color = colors[index]
+            canvas.drawPath(paths[index], paint)
         }
         canvas.drawPath(path, paint)
     }
@@ -47,13 +50,15 @@ class DrawingView @JvmOverloads constructor(
 
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
-                path.reset()
                 path.moveTo(x, y)
+                colors.add(color)
+                paths.add(Path(path))
             }
             MotionEvent.ACTION_MOVE -> {
                 path.lineTo(x, y)
             }
             MotionEvent.ACTION_UP -> {
+                colors.add(color)
                 paths.add(Path(path))
                 path.reset()
             }
@@ -80,6 +85,7 @@ class DrawingView @JvmOverloads constructor(
         if (paths.isNotEmpty()) {
             path.reset()
             paths.clear()
+            colors.clear()
             invalidate()
         }
     }
@@ -87,7 +93,12 @@ class DrawingView @JvmOverloads constructor(
     fun undo() {
         if (paths.isNotEmpty()) {
             paths.removeLast()
+            colors.removeLast()
             invalidate()
         }
+    }
+
+    fun setColor(colorHex: String) {
+        color = Color.parseColor(colorHex)
     }
 }

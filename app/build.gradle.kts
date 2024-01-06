@@ -55,4 +55,5 @@ dependencies {
     implementation ("com.elveum:element-adapter:0.6")
     implementation("io.coil-kt:coil:2.5.0")
     implementation ("androidx.fragment:fragment-ktx:1.6.2")
+    implementation("com.github.Dhaval2404:ColorPicker:2.3")
 }

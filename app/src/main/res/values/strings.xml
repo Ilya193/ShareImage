@@ -6,4 +6,5 @@
     <string name="error_upload_result">Произошла ошибка при загрузке файла на сервер</string>
     <string name="error_fetch_images">Произошла ошибка при отправке запроса на сервер</string>
     <string name="retry">Попробовать снова</string>
+    <string name="get_color">Выбрать цвет</string>
 </resources>
